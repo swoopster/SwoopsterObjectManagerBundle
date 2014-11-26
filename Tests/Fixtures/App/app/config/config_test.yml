@@ -1,0 +1,37 @@
+imports:
+    - { resource: config.yml }
+
+framework:
+    test: ~
+    session:
+        storage_id: session.storage.filesystem
+
+    router:   { resource: "%kernel.root_dir%/config/routing.yml" }
+    profiler: { only_exceptions: false }
+
+security: ~
+
+liip_functional_test: ~
+
+security:
+    firewalls:
+        secured_area:
+            pattern:   ^/
+            anonymous: ~
+            http_basic:
+                realm: "Secured Demo Area"
+
+    access_control:
+        - { path: ^/admin/, roles: ROLE_ADMIN }
+        # Include the following line to also secure the /admin path itself
+        # - { path: ^/admin$, roles: ROLE_ADMIN }
+
+    providers:
+        in_memory:
+            memory:
+                users:
+                    ryan:  { password: ryanpass, roles: 'ROLE_USER' }
+                    admin: { password: kitten, roles: 'ROLE_ADMIN' }
+
+    encoders:
+        Symfony\Component\Security\Core\User\User: plaintext

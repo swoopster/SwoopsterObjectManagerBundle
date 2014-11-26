@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://symfony.com/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="swoopster.object_manager.model.abstract_manager.class">Swoopster\ObjectManagerBundle\Model\AbstractManager</parameter>
+    </parameters>
+
+    <services>
+        <service id="swoopster.object_manager.abstract-manager" class="%swoopster.object_manager.model.abstract_manager.class%" abstract="true">
+            <call method="setContainer">
+                <argument type="service" id="service_container"/>
+            </call>
+        </service>
+    </services>
+
+</container>
