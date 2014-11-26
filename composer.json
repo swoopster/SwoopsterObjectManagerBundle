@@ -3,8 +3,8 @@
     "description" : "Bundle provides structured model handling",
     "type" : "symfony-bundle",
     "authors" : [{
-        "name" : "demo",
-        "email" : "demo@company.com"
+        "name" : "Malte Rojahn",
+        "email" : "malte@swoopster.org"
     }],
     "keywords" : [
         "object manager "
