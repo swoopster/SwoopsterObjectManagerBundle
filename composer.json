@@ -1,0 +1,30 @@
+{
+    "name" : "swoopster/objectmanagerbundle",
+    "description" : "Bundle provides structured model handling",
+    "type" : "symfony-bundle",
+    "authors" : [{
+        "name" : "demo",
+        "email" : "demo@company.com"
+    }],
+    "keywords" : [
+        "object manager "
+    ],
+    "license" : [
+        "MIT"
+    ],
+    "require" : {
+    },
+    "autoload" : {
+        "psr-0" : {
+            "Swoopster\\ObjectManagerBundle" : ""
+        }
+    },
+    "target-dir" : "Swoopster/ObjectManagerBundle",
+    "repositories" : [{
+    }],
+    "extra" : {
+        "branch-alias" : {
+            "dev-master" : "master"
+        }
+    }
+}
