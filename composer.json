@@ -14,10 +14,17 @@
     "license": [
         "MIT"
     ],
+    "minimum-stability": "stable",
     "require": {
         "phpunit/phpunit": "*",
-        "symfony/framework-bundle": "2.3.*",
-        "symfony/security-bundle": "2.3.*"
+        "symfony/framework-bundle": ">=2.3.0",
+        "symfony/security-bundle": ">=2.3.0",
+        "doctrine/orm": ">=2.4.0",
+        "doctrine/doctrine-bundle": ">=1.2.0"
+    },
+    "require-dev": {
+        "liip/functional-test-bundle": "1.0.*",
+        "symfony/finder": "2.5.*"
     },
     "autoload": {
         "psr-4": {
@@ -28,9 +35,6 @@
         "branch-alias": {
             "dev-master": "master"
         }
-    },
-    "require-dev": {
-        "liip/functional-test-bundle": "1.0.*",
-        "symfony/finder": "2.5.*"
     }
+
 }
