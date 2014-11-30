@@ -5,3 +5,11 @@ framework:
   default_locale: en
   translator: { fallback: en }
   profiler: { only_exceptions: false }
+
+doctrine:
+    orm:
+        entity_managers:
+            default: # that's the name of the entity manager
+                connection: default
+
+swoopster_object_manager: ~

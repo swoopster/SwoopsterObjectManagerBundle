@@ -6,12 +6,19 @@
 
     <parameters>
         <parameter key="swoopster.object_manager.model.abstract_manager.class">Swoopster\ObjectManagerBundle\Model\AbstractManager</parameter>
+        <parameter key="swoopster.object_manager.doctrine.doctrine_manager.class">Swoopster\ObjectManagerBundle\Doctrine\DoctrineManager</parameter>
     </parameters>
 
     <services>
         <service id="swoopster.object_manager.abstract_manager" class="%swoopster.object_manager.model.abstract_manager.class%" abstract="true">
             <call method="setContainer">
                 <argument type="service" id="service_container"/>
+            </call>
+        </service>
+        <service id="swoopster.object_manager.doctrine_manager" class="%swoopster.object_manager.doctrine.doctrine_manager.class%"
+                 parent="swoopster.object_manager.abstract_manager" abstract="true">
+            <call method="setRegistry">
+                <argument type="service" id="doctrine"/>
             </call>
         </service>
     </services>

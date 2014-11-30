@@ -24,6 +24,26 @@ class Configuration implements ConfigurationInterface
     {
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('swoopster_object_manager');
+		$rootNode
+			->children()
+				->scalarNode('bundle_dir')
+					->defaultValue('src')
+				->end()
+				->scalarNode('model_dir')
+					->defaultValue('Model')
+				->end()
+				->enumNode('mapping_format')
+					->values(array('xml', 'yml'))
+					->defaultValue('xml')
+				->end()
+				->arrayNode('bundles')
+					->prototype('array')
+						->children()
+							->scalarNode('namespace')->end()
+						->end()
+					->end()
+				->end()
+			->end();
 
         // Here you should define the parameters that are allowed to
         // configure your bundle. See the documentation linked above for

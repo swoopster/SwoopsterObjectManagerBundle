@@ -6,7 +6,6 @@
 * For the full copyright and license information, please view the LICENSE
 * file that was distributed with this source code.
 */
-
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
@@ -17,10 +16,11 @@ class AppKernel extends Kernel
 		$bundles = array(
 			new Symfony\Bundle\FrameworkBundle\FrameworkBundle(),
 			new Symfony\Bundle\SecurityBundle\SecurityBundle(),
+			new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
 // register the other bundles your tests depend on
 // and don't forget your own bunde!
-			new \Swoopster\ObjectManagerBundle\SwoopsterObjectManagerBundle(),
-		);
+			new Swoopster\ObjectManagerBundle\SwoopsterObjectManagerBundle(),
+					);
 
 		if (in_array($this->getEnvironment(), array('test'))) {
 			$bundles[] = new Liip\FunctionalTestBundle\LiipFunctionalTestBundle();

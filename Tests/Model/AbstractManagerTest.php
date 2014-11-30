@@ -35,6 +35,7 @@ class AbstractManagerTest extends WebTestCase
 		$this->assertEquals($this->getContainer()->get('security.context'), $mock->getSecurityContext(), 'have to return instance of SecurityContext');
 	}
 
+
     /**
      * @return AbstractManager
      */
