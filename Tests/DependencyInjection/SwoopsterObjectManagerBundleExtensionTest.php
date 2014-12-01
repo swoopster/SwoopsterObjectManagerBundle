@@ -29,6 +29,18 @@ class SwoopsterObjectManagerBundleExtensionTest extends AbstractExtensionTestCas
 		$this->assertContainerBuilderHasServiceDefinitionWithParent('swoopster.object_manager.doctrine_manager', 'swoopster.object_manager.abstract_manager');
 		$this->assertContainerBuilderHasServiceDefinitionWithMethodCall('swoopster.object_manager.doctrine_manager', 'setRegistry', array('doctrine'));
 
+		//testing factory definition
+		$this->assertContainerBuilderHasService('swoopster.object_manager.manager_factory', 'Swoopster\ObjectManagerBundle\Model\ManagerFactory');
+
+		//testing events
+		$this->assertContainerBuilderHasService('swoopster.object_manager.event_listener.doctrine_entity_listener');
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'prePersist'));
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'postPersist'));
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'preUpdate'));
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'postUpdate'));
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'preRemove'));
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'postRemove'));
+		$this->assertContainerBuilderHasServiceDefinitionWithTag('swoopster.object_manager.event_listener.doctrine_entity_listener', 'doctrine.event_listener', array('event' => 'postLoad'));
 		//Testing Parameterdefinitions
 		$this->assertContainerBuilderHasParameter('swoopster_object_manager.model_dir');
 		$this->assertContainerBuilderHasParameter('swoopster_object_manager.bundle_dir');

@@ -23,7 +23,8 @@ class ObjectManagerBundleContainerTest extends WebTestCase
 	static public function dataServiceConstruction()
 	{
 		return array(
-			array('swoopster.object_manager.test_doctrine_manager', 'Swoopster\ObjectManagerBundle\Doctrine\DoctrineManager')
+			array('swoopster.object_manager.test_doctrine_manager', 'Swoopster\ObjectManagerBundle\Doctrine\DoctrineManager'),
+			array('swoopster.object_manager.manager_factory', 'Swoopster\ObjectManagerBundle\Model\ManagerFactory')
 		);
 	}
 } 

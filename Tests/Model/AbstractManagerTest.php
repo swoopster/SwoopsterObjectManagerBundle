@@ -53,7 +53,7 @@ class AbstractManagerTest extends WebTestCase
 
     protected function getExampleClass()
     {
-       return 'Swoopster\ObjectManagerBundle\Tests\Model\TestModel';
+       return 'Swoopster\ObjectManagerBundle\Tests\TestModel';
     }
 
 	protected function getFalseExampleClass()
@@ -62,9 +62,6 @@ class AbstractManagerTest extends WebTestCase
 	}
 }
 
-class TestModel {
-
-}
 
 class FalseTestModel {
 

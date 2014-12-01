@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<container xmlns="http://symfony.com/schema/dic/services"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="swoopster.object_manager.event_listener.doctrine_entity_listener.class">Swoopster\ObjectManagerBundle\EventListener\DoctrineEntityListener</parameter>
+    </parameters>
+
+    <services>
+        <service id="swoopster.object_manager.event_listener.doctrine_entity_listener" class="%swoopster.object_manager.event_listener.doctrine_entity_listener.class%">
+            <tag name="doctrine.event_listener" event="prePersist"/>
+            <tag name="doctrine.event_listener" event="postPersist"/>
+            <tag name="doctrine.event_listener" event="preUpdate"/>
+            <tag name="doctrine.event_listener" event="postUpdate"/>
+            <tag name="doctrine.event_listener" event="preRemove"/>
+            <tag name="doctrine.event_listener" event="postRemove"/>
+            <tag name="doctrine.event_listener" event="postLoad"/>
+            <argument type="service" id="swoopster.object_manager.manager_factory"/>
+        </service>
+    </services>
+
+</container>

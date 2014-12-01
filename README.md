@@ -8,7 +8,7 @@ Open a command console, enter your project directory and execute the
 following command to download the latest stable version of this bundle:
 
 ```bash
-$ composer require swoopster/objectmanagerbundle "~0.1"
+$ composer require swoopster/objectmanagerbundle "~0.2"
 ```
 
 This command requires you to have Composer installed globally, as explained
@@ -60,6 +60,13 @@ Define your mapping definitions inside `BundleFolder/Resources/config/doctrine/m
 
 ## Use Manager
 
+To get the manager use `$container->get('id')` or use the factory. To use the factory the manager service has to be tagged with 
+the following tag:
+
+    <tag name="swoopster.object_manager"/>
+    
+Now you can get an Manager by using the `$conatainer->get('swoopster.object_manager.manager_factory')->getManager($instanceOfManagedObject)`
+
 ### Standard Manager
 
 To use a manager for an object without customization, define a service like below
@@ -107,6 +114,26 @@ delete an existing instance of managed modelclass
 the manager supports a predefined set of methods to find objects in database. you can find supported functions in `Swoopster\ObjectManagerBundle\Model\ManagerInterface`
 
     $manager->find*()
+    
+## Lifecycle Events
+
+To use the lifecycle events you need to comply with the following requirments
+
+1. the model to be managed must implement `Swoopster\ObjectManagerBundle\Model\EventDrivenModelInterface`
+1. the manager belonging to this model must implement `Swoopster\ObjectManagerBundle\Model\ManagerEventInterface`
+1. manager must be registered in the factory
+
+### Supported Events
+
+All events are expecting an instance of the managed model as argument
+
+- prePersist
+- postPersit
+- preUpdate
+- postUpdate
+- preRemove
+- postRemove
+- postLoad
     
 License
 -------
