@@ -107,3 +107,10 @@ delete an existing instance of managed modelclass
 the manager supports a predefined set of methods to find objects in database. you can find supported functions in `Swoopster\ObjectManagerBundle\Model\ManagerInterface`
 
     $manager->find*()
+    
+License
+-------
+
+This bundle is under the MIT license. See the complete license in the bundle:
+
+    Resources/meta/LICENSE
