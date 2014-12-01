@@ -24,7 +24,6 @@ class AbstractManagerTest extends WebTestCase
     public function testCreate()
     {
         $this->assertInstanceOf($this->getExampleClass(), $this->getObject()->create(), 'Objekt wird nicht korrek erstellt');
-
     }
 
 	public function testGetSecurityContext(){
