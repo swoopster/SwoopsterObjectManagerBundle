@@ -16,7 +16,6 @@
     ],
     "minimum-stability": "stable",
     "require": {
-        "phpunit/phpunit": "*",
         "symfony/framework-bundle": ">=2.3.0",
         "symfony/security-bundle": ">=2.3.0",
         "doctrine/orm": ">=2.4.0",
@@ -24,6 +23,7 @@
         "sensio/framework-extra-bundle": "~3.0"
     },
     "require-dev": {
+        "phpunit/phpunit": "*",
         "liip/functional-test-bundle": "1.0.*",
         "symfony/finder": "2.5.*",
         "matthiasnoback/symfony-config-test": "0.*",
