@@ -119,7 +119,10 @@ class DoctrineEntityListener
 			$item->{$params['event']}($params['entity'], $params['params']);
 		};
 
-		$result = array_walk($this->getManager($entity), $walk , array('event' => $event, 'entity' => $entity, 'params' => $params));
+		$manager = $this->getManager($entity);
+
+		$result = array_walk($manager, $walk , array('event' => $event, 'entity' => $entity, 'params' => $params));
+
 	}
 
 	/**
