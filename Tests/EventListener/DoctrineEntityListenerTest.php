@@ -60,7 +60,6 @@ class DoctrineEntityListenerTest extends WebTestCase
 		$this->manager->expects($this->exactly(1))
 			->method('prePersist')
 			->with(new TestModel())
-			->willReturnCallback($func = function(){var_dump('test');})
 		;
 
 		$this->listener->prePersist($this->args);
@@ -80,8 +79,26 @@ class DoctrineEntityListenerTest extends WebTestCase
 	{
 		$this->manager->expects($this->exactly(1))
 			->method('preUpdate')
-			->with(new TestModel())
+			->with(new TestModel(), array('change_set' => array('id' => array('old', 'new'))))
 		;
+
+
+		$emMock = $this->getMock('\Doctrine\ORM\EntityManager',
+			array('getRepository', 'getClassMetadata', 'persist', 'flush'), array(), '', false);
+		$emMock->expects($this->any())
+			->method('getClassMetadata')
+			->will($this->returnValue((object)array('name' => 'aClass')));
+		$emMock->expects($this->any())
+			->method('persist')
+			->will($this->returnValue(null));
+		$emMock->expects($this->any())
+			->method('flush')
+			->will($this->returnValue(null));
+
+		$this->args = $this->getMock('Doctrine\ORM\Event\PreUpdateEventArgs',array('getObject'), array(new TestModel(), $emMock, array('id' => array('old', 'new'))));
+		$this->args->expects($this->any())
+			->method('getObject')
+			->willReturn(new TestModel());
 
 		$this->listener->preUpdate($this->args);
 	}

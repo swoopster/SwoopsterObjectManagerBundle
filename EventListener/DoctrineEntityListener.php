@@ -8,6 +8,7 @@
 namespace Swoopster\ObjectManagerBundle\EventListener;
 
 use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Event\PreUpdateEventArgs;
 use Swoopster\ObjectManagerBundle\Model\EventDrivenModelInterface;
 use Swoopster\ObjectManagerBundle\Model\ManagerEventsInterface;
 use Swoopster\ObjectManagerBundle\Model\ManagerFactory;
@@ -55,11 +56,11 @@ class DoctrineEntityListener
 	/**
 	 * @param LifecycleEventArgs $args
 	 */
-	public function preUpdate(LifecycleEventArgs $args)
+	public function preUpdate(PreUpdateEventArgs $args)
 	{
 		$entity = $args->getObject();
 		if($entity instanceof EventDrivenModelInterface){
-			$this->callEvent('preUpdate', $entity);
+			$this->callEvent('preUpdate', $entity, array('change_set'=> $args->getEntityChangeSet()));
 		}
 	}
 
@@ -107,13 +108,18 @@ class DoctrineEntityListener
 		}
 	}
 
-	private function  callEvent($event, $entity)
+	/**
+	 * @param $event
+	 * @param $entity
+	 * @param array $params event depending parameter
+	 */
+	private function  callEvent($event, $entity, $params = array())
 	{
 		$walk = function($item, $key, $params){
-			$item->{$params['event']}($params['entity']);
+			$item->{$params['event']}($params['entity'], $params['params']);
 		};
 
-		$result = array_walk($this->getManager($entity), $walk , array('event' => $event, 'entity' => $entity));
+		$result = array_walk($this->getManager($entity), $walk , array('event' => $event, 'entity' => $entity, 'params' => $params));
 	}
 
 	/**

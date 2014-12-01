@@ -16,18 +16,18 @@ namespace Swoopster\ObjectManagerBundle\Model;
 interface ManagerEventsInterface
 {
 
-	public function prePersist($entity);
+	public function prePersist($entity, $params = array());
 
-	public function postPersist($entity);
+	public function postPersist($entity, $params = array());
 
-	public function preUpdate($entity);
+	public function preUpdate($entity, $params = array());
 
-	public function postUpdate($entity);
+	public function postUpdate($entity, $params = array());
 
-	public function preRemove($entity);
+	public function preRemove($entity, $params = array());
 
-	public function postRemove($entity);
+	public function postRemove($entity, $params = array());
 
-	public function postLoad($entity);
+	public function postLoad($entity, $params = array());
 
 } 
