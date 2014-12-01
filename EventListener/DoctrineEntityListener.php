@@ -36,7 +36,7 @@ class DoctrineEntityListener
 		$entity = $args->getObject();
 
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->prePersist($entity);
+			$this->callEvent('prePersist', $entity);
 		}
 	}
 
@@ -48,7 +48,7 @@ class DoctrineEntityListener
 		$entity = $args->getObject();
 
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->postPersist($entity);
+			$this->callEvent('postPersist', $entity);
 		}
 	}
 
@@ -59,7 +59,7 @@ class DoctrineEntityListener
 	{
 		$entity = $args->getObject();
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->preUpdate($entity);
+			$this->callEvent('preUpdate', $entity);
 		}
 	}
 
@@ -70,7 +70,7 @@ class DoctrineEntityListener
 	{
 		$entity = $args->getObject();
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->postUpdate($entity);
+			$this->callEvent('postUpdate', $entity);
 		}
 	}
 
@@ -81,7 +81,7 @@ class DoctrineEntityListener
 	{
 		$entity = $args->getObject();
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->preRemove($entity);
+			$this->callEvent('preRemove', $entity);
 		}
 	}
 
@@ -92,7 +92,7 @@ class DoctrineEntityListener
 	{
 		$entity = $args->getObject();
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->postRemove($entity);
+			$this->callEvent('postRemove', $entity);
 		}
 	}
 
@@ -103,19 +103,52 @@ class DoctrineEntityListener
 	{
 		$entity = $args->getObject();
 		if($entity instanceof EventDrivenModelInterface){
-			$this->getManager($entity)->postLoad($entity);
+			$this->callEvent('postLoad', $entity);
 		}
+	}
+
+	private function  callEvent($event, $entity)
+	{
+		$walk = function($item, $key, $params){
+			$item->{$params['event']}($params['entity']);
+		};
+
+		$result = array_walk($this->getManager($entity), $walk , array('event' => $event, 'entity' => $entity));
 	}
 
 	/**
 	 * @param $entity
-	 * @return ManagerEventsInterface
+	 * @return ManagerEventsInterface[]
 	 */
 	private function getManager($entity)
 	{
-		$manager = $this->managerFactory->getManager(get_class($entity));
-		if(!$manager instanceof ManagerEventsInterface){
+		$manager = array();
+		$class = get_class($entity);
+
+		do{
+			$foundManager = $this->getManagerByString($class);
+			if(isset($foundManager)){
+				array_push($manager,  $foundManager);
+			}
+
+		}while($class = get_parent_class($class));
+
+		if(empty($manager))
+		{
 			throw new InvalidConfigurationException('Class doesn\'t implements ManagerEventsInterface');
+		}
+		return $manager;
+	}
+
+	/**
+	 * @param $className
+	 * @return null|ManagerEventsInterface
+	 */
+	private function getManagerByString($className)
+	{
+		$manager = $this->managerFactory->getManager($className);
+		if(!$manager instanceof ManagerEventsInterface){
+			return null;
 		}
 		return $manager;
 	}

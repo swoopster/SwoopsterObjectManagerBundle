@@ -10,6 +10,7 @@ namespace Swoopster\ObjectManagerBundle\Tests\EventListener;
 use Liip\FunctionalTestBundle\Test\WebTestCase;
 use PHPUnit_Framework_MockObject_MockObject;
 use Swoopster\ObjectManagerBundle\EventListener\DoctrineEntityListener;
+use Swoopster\ObjectManagerBundle\Model\EventDrivenModelInterface;
 use Swoopster\ObjectManagerBundle\Model\ManagerFactory;
 use Swoopster\ObjectManagerBundle\Tests\TestModel;
 
@@ -59,6 +60,7 @@ class DoctrineEntityListenerTest extends WebTestCase
 		$this->manager->expects($this->exactly(1))
 			->method('prePersist')
 			->with(new TestModel())
+			->willReturnCallback($func = function(){var_dump('test');})
 		;
 
 		$this->listener->prePersist($this->args);
@@ -124,6 +126,48 @@ class DoctrineEntityListenerTest extends WebTestCase
 		$this->listener->postLoad($this->args);
 	}
 
+	public function testChainedManager(){
+		$firstManager = $this->getMock('Swoopster\ObjectManagerBundle\Model\ManagerEventsInterface');
+		$firstManager->expects($this->any())
+			->method('getClass')
+			->willReturn(get_class(new TestModel()));
+
+		$secondManager = $this->getMock('Swoopster\ObjectManagerBundle\Model\ManagerEventsInterface');
+		$secondManager->expects($this->any())
+			->method('getClass')
+			->willReturn(get_class(new ChildTestModel()));
+
+		$this->managerFactory = $this->getMock(get_class(new ManagerFactory()));
+		$this->managerFactory->expects($this->at(0))
+			->method('getManager')
+			->with(get_class(new ChildTestModel()))
+			->willReturn($firstManager);
+		;
+		$this->managerFactory->expects($this->at(1))
+			->method('getManager')
+			->with(get_class(new TestModel()))
+			->willReturn($secondManager);
+
+		$this->mockListener($this->managerFactory);
+
+		$this->args = $this->getMock('Doctrine\ORM\Event\LifecycleEventArgs',array('getObject'), array(new ChildTestModel(), $this->getMock('Doctrine\Common\Persistence\ObjectManager')));
+		$this->args->expects($this->any())
+			->method('getObject')
+			->willReturn(new ChildTestModel());
+
+		$firstManager->expects($this->exactly(1))
+			->method('postRemove')
+			->with(new ChildTestModel())
+		;
+
+		$secondManager->expects($this->exactly(1))
+			->method('postRemove')
+			->with(new ChildTestModel())
+			;
+
+		$this->listener->postRemove($this->args);
+	}
+
 	public function testExcpetionNoManagerEventInterface()
 	{
 		$this->manager = $this->getMock('Swoopster\ObjectManagerBundle\Model\ManagerInterface');
@@ -153,4 +197,8 @@ class DoctrineEntityListenerTest extends WebTestCase
 	{
 		$this->listener = new DoctrineEntityListener($factory);
 	}
-} 
+}
+
+class ChildTestModel extends TestModel implements EventDrivenModelInterface{
+
+}
