@@ -31,7 +31,8 @@
     },
     "autoload": {
         "psr-4": {
-            "Swoopster\\ObjectManagerBundle\\": ""
+            "Swoopster\\ObjectManagerBundle\\": "",
+            "Swoopster\\TestBundle\\" : "Tests/Fixtures/App/src/Swoopster/TestBundle"
         }
     },
     "extra": {

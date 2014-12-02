@@ -8,6 +8,7 @@
 namespace Swoopster\ObjectManagerBundle\DependencyInjection\Compiler;
 
 use Doctrine\Bundle\DoctrineBundle\DependencyInjection\Compiler\DoctrineOrmMappingsPass;
+use ReflectionClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
@@ -23,17 +24,7 @@ class RegisterMappingsCompilerPass extends  DoctrineOrmMappingsPass
 	/**
 	 * @var string
 	 */
-	private $rootDir;
-
-	/**
-	 * @var string
-	 */
 	private $modelDir;
-
-	/**
-	 * @var string
-	 */
-	private $bundleDir;
 
 	public function __construct(){
 		$namespaces = array();
@@ -55,9 +46,7 @@ class RegisterMappingsCompilerPass extends  DoctrineOrmMappingsPass
 	{
 		if(count($container->getParameterBag()->all()) === 0) return;
 		//get parameter
-		$this->rootDir = $container->getParameter('kernel.root_dir');
 		$this->modelDir = $container->getParameter('swoopster_object_manager.model_dir');
-		$this->bundleDir = $container->getParameter('swoopster_object_manager.bundle_dir');
 
 		$this->configureCompilerPass($container);
 
@@ -92,11 +81,14 @@ class RegisterMappingsCompilerPass extends  DoctrineOrmMappingsPass
 	{
 		$mappings =  array();
 		foreach ($container->getParameter('swoopster_object_manager.bundles') as $bundle) {
-			$modelDir = realpath($this->rootDir.'/../'.$this->bundleDir.'/'.str_replace('\\', '/', $bundle['namespace']). '/Resources/config/doctrine/model');
+			$bundleDir = $this->getBundlePath($bundle['namespace']);
+			$modelDir = realpath($bundleDir. '/Resources/config/doctrine/model');
 			$mappings = array_merge($mappings, array(
 				$modelDir => $bundle['namespace'].'\\'.$this->modelDir,
 			));
+
 		}
+
 
 		if(!empty($mappings)){
 			$this->namespaces = $mappings;
@@ -107,6 +99,17 @@ class RegisterMappingsCompilerPass extends  DoctrineOrmMappingsPass
 		$this->driver = new Definition('Doctrine\ORM\Mapping\Driver\XmlDriver', array($locator));
 	}
 
+	/**
+	 * Get Path to Bundle root
+	 *
+	 * @param string $namespace
+	 * @return string
+	 */
+	private function getBundlePath($namespace)
+	{
+		$split = explode('\\', $namespace);
+		$rc = new ReflectionClass($namespace . '\\' . implode('', $split));
+		return dirname($rc->getFileName());
 
-
+	}
 }

@@ -20,13 +20,10 @@ class RegisterMappingsCompilerPassTest extends AbstractCompilerPassTestCase
 		$bundleDir = 'src';
 		$namespace = 'Swoopster\TestBundle';
 		$root = __DIR__.'/../../Fixtures/App/app';
-
 		$this->setDefinition('doctrine.orm.default_metadata_driver', new Definition());
 		$this->container->setParameter('doctrine.default_entity_manager', 'default');
 
-		$this->container->setParameter('kernel.root_dir', $root);
 		$this->container->setParameter('swoopster_object_manager.model_dir', $modelDir);
-		$this->container->setParameter('swoopster_object_manager.bundle_dir', $bundleDir);
 		$this->container->setParameter('swoopster_object_manager.mapping_format', 'xml');
 		$this->container->setParameter('swoopster_object_manager.bundles', array(
 			array('namespace' => $namespace)
@@ -37,8 +34,6 @@ class RegisterMappingsCompilerPassTest extends AbstractCompilerPassTestCase
 		$compilerPass = $this->container->getCompilerPassConfig()->getPasses()[1];
 
 		$this->assertEquals($modelDir, \PHPUnit_Framework_Assert::readAttribute($compilerPass, 'modelDir'));
-		$this->assertEquals($bundleDir, \PHPUnit_Framework_Assert::readAttribute($compilerPass, 'bundleDir'));
-		$this->assertEquals($root, \PHPUnit_Framework_Assert::readAttribute($compilerPass, 'rootDir'));
 		$this->assertEquals(array(
 			realpath($root.'/../'.$bundleDir.'/Swoopster/TestBundle/Resources/config/doctrine/model') => $namespace.'\\'.$modelDir
 		), \PHPUnit_Framework_Assert::readAttribute($compilerPass, 'namespaces'));

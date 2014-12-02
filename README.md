@@ -47,7 +47,6 @@ by the ObjectManager. Currently this bundle supports only the xml-mapping-format
 
     swoopster_object_manager:
         model_dir: Model #default
-        bundle_dir: src  #default
         mapping_format: xml #default
         bundles:
             - {namespace: Swoopster\TestBundle}
